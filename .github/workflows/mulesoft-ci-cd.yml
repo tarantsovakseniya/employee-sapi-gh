@@ -13,6 +13,11 @@ on:
 
 jobs:
     build:  
+        env: 
+            CONNECTED_APP_ID: ${{ secrets.CONNECTED_APP_ID }}
+            CONNECTED_APP_SECRET: ${{ secrets.CONNECTED_APP_SECRET }}
+            NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}   
+            NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}   
         runs-on: ubuntu-latest
         steps:
              - name: Get the code
@@ -23,6 +28,7 @@ jobs:
                 distribution: 'adopt-hotspot'
                 java-version: '8'
                 cache: maven
+
              - name: Build the jar
                run: mvn package -DskipTests -Dsecret.key=${{ secrets.MULE_KEY }}
 
