@@ -44,11 +44,16 @@
 						</goals>
 					</execution>
 				</executions>
+				<ignoreFiles>
+					<ignoreFile>error-handling</ignoreFile>
+				</ignoreFiles>
+				<requiredApplicationCoverage>70</requiredApplicationCoverage>
 				<configuration>
 					<coverage>
 						<runCoverage>true</runCoverage>
 						<formats>
 							<format>html</format>
+							<format>console</format>
 						</formats>
 					</coverage>
 				</configuration>

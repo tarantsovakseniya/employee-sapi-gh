@@ -31,10 +31,10 @@ jobs:
                 cache: maven
 
              - name: Run MUnit Tests
-               run: mvn clean test --settings .maven/settings.xml -Dsecret.key=${{ secrets.MULE_KEY }} 
+               run: mvn clean test --settings .maven/settings.xml -Dsecure.key=${{ secrets.MULE_KEY }} 
                 
              - name: Build the jar
-               run: mvn package --settings .maven/settings.xml -DskipTests -Dsecret.key=${{ secrets.MULE_KEY }} 
+               run: mvn package --settings .maven/settings.xml -DskipTests -Dsecure.key=${{ secrets.MULE_KEY }} 
 
 
             
