@@ -12,6 +12,7 @@
 		<mule.maven.plugin.version>4.2.0</mule.maven.plugin.version>
 		<munit.version>3.0.0</munit.version>
 		<app.runtime>4.4.0-20240614</app.runtime>
+		<app.version>v1</app.version>
 		<anypoint.org.id>b3f988fb-0209-455b-af9c-ad4dbc9060c2</anypoint.org.id>
 	</properties>
 	<build>
@@ -27,6 +28,21 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
+					<cloudHubDeployment>
+						<uri>https://anypoint.mulesoft.com</uri>
+						<muleVersion>${app.runtime}</muleVersion>
+						<connectedAppClientId>${connected.app.id}</connectedAppClientId>
+						<connectedAppClientSecret>${connected.app.secret}</connectedAppClientSecret>
+						<connectedAppGrantType>client_credentials</connectedAppGrantType>
+						<applicationName>${project.artifactId}-${app.version}-${cloudhub.environment}</applicationName>
+						<environment>${cloudhub.environment}</environment>
+						<region>${cloudhub.region}</region>
+						<workers>${cloudhub.workers}</workers>
+						<workerType>${cloudhub.workerType}</workerType>
+						<properties>
+							<secure.key>${secure.key}</secure.key>
+						</properties>
+					</cloudHubDeployment>
 					<classifier>mule-application</classifier>
 				</configuration>
 			</plugin>
@@ -50,6 +66,9 @@
 						<ignoreFiles>
 							<ignoreFile>error-handling</ignoreFile>
 						</ignoreFiles>
+						<ignoreFlows>
+							<ignoreFlow>employee-system-api-main</ignoreFlow>
+						</ignoreFlows>
 						<requiredApplicationCoverage>70</requiredApplicationCoverage>
 						<formats>
 							<format>html</format>

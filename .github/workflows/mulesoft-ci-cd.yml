@@ -13,11 +13,6 @@ on:
 
 jobs:
     build:  
-        env: 
-            CONNECTED_APP_ID: ${{ secrets.CONNECTED_APP_ID }}
-            CONNECTED_APP_SECRET: ${{ secrets.CONNECTED_APP_SECRET }}
-            NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}   
-            NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}   
         runs-on: ubuntu-latest
         steps:
              - name: Get the code
@@ -31,10 +26,36 @@ jobs:
                 cache: maven
 
              - name: Run MUnit Tests
+               env:
+                NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}   
+                NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}  
                run: mvn clean test --settings .maven/settings.xml -Dsecure.key=${{ secrets.MULE_KEY }} 
                 
              - name: Build the jar
+               env:
+                CONNECTED_APP_ID: ${{ secrets.CONNECTED_APP_ID }}
+                CONNECTED_APP_SECRET: ${{ secrets.CONNECTED_APP_SECRET }}
                run: mvn package --settings .maven/settings.xml -DskipTests -Dsecure.key=${{ secrets.MULE_KEY }} 
+
+             - name: Deploy to CloudHub
+               env:
+                CLOUDHUB_WORKER: "1"
+                CLOUDHUB_WORKER_TYPE: "MICRO"
+                CLOUDHUB_REGION: "ca-central-1"
+                CLOUDHUB_ENVIRONMENT: ${{ inputs.deploy_target }}
+                CONNECTED_APP_ID: ${{ secrets.CONNECTED_APP_ID }}
+                CONNECTED_APP_SECRET: ${{ secrets.CONNECTED_APP_SECRET }}
+                MULE_KEY: ${{ secrets.MULE_KEY }}
+               run: |
+                artifactName=$( ls target/*.jar | head -1 )
+                mvn deploy -B -DskipTests -DmuleDeploy \
+                    -Dmule.artifact=$artifactName \
+                    -Dsecure.key="$MULE_KEY" \
+                    -Dconnected.app.id=${{ env.CONNECTED_APP_ID }} \
+                    -Dconnected.app.secret=${{ env.CONNECTED_APP_SECRET }} \
+                    -Dcloudhub.environment=${{ inputs.deploy_target }} \
+                    -Dcloudhub.region=${{ env.CLOUDHUB_REGION }} 
+
 
 
             
