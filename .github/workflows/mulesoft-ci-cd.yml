@@ -46,6 +46,7 @@ jobs:
                 CONNECTED_APP_SECRET: ${{ secrets.CONNECTED_APP_SECRET }}
                 MULE_KEY: ${{ secrets.MULE_KEY }}
                run: |
+                muleEnv=$(echo ${{ env.CLOUDHUB_ENVIRONMENT }} | sed -e 's/\(.*\)/\L\1/')
                 artifactName=$( ls target/*.jar | head -1 )
                 mvn deploy -B -DskipTests -DmuleDeploy \
                     -Dmule.artifact=$artifactName \
@@ -56,6 +57,7 @@ jobs:
                     -Dcloudhub.region=${{ env.CLOUDHUB_REGION }} \
                     -Dcloudhub.worker.type=${{ env.CLOUDHUB_WORKER_TYPE }} \
                     -Dcloudhub.worker=${{ env.CLOUDHUB_WORKER }} \
+                    -Dmule.env=$muleEnv
 
 
 
