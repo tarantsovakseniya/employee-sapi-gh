@@ -1,5 +1,5 @@
 {
-    "minMuleVersion": "4.7.1",
+    "minMuleVersion": "4.7",
     "javaSpecificationVersions": ["1.8"],
     "secureProperties": [
     	"secure.key"
