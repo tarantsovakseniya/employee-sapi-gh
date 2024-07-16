@@ -1,0 +1,30 @@
+name: mulesoft-pipeline
+
+run-name: deploy to cloudhub
+
+on:
+    workflow_dispatch:
+        inputs:
+            deploy_target:
+                type: choice
+                required: true
+                options:
+                - Sandbox
+
+jobs:
+    build:  
+        runs-on: ubuntu-latest
+        steps:
+             - name: Get the code
+               uses: actions/checkout@v4
+             - name: Set Up Java
+               uses: actions/setup-java@v4
+               with:
+                distribution: 'adopt-hotspot'
+                java-version: '8'
+                cache: maven
+             - name: Build the jar
+               run: mvn package -DskipTests -Dsecret.key=${{ secrets.MULE_KEY }}
+
+
+            
