@@ -13,6 +13,11 @@ on:
 
 jobs:
     build:  
+        env:
+            NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}   
+            NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+            CONNECTED_APP_ID: ${{ secrets.CONNECTED_APP_ID }}
+            CONNECTED_APP_SECRET: ${{ secrets.CONNECTED_APP_SECRET }}
         runs-on: ubuntu-latest
         steps:
              - name: Get the code
@@ -26,15 +31,9 @@ jobs:
                 cache: maven
 
              - name: Run MUnit Tests
-               env:
-                NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}   
-                NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}  
                run: mvn clean test --settings .maven/settings.xml -Dsecure.key=${{ secrets.MULE_KEY }} 
                 
              - name: Build the jar
-               env:
-                CONNECTED_APP_ID: ${{ secrets.CONNECTED_APP_ID }}
-                CONNECTED_APP_SECRET: ${{ secrets.CONNECTED_APP_SECRET }}
                run: mvn package --settings .maven/settings.xml -DskipTests -Dsecure.key=${{ secrets.MULE_KEY }} 
 
              - name: Deploy to CloudHub
@@ -54,7 +53,10 @@ jobs:
                     -Dconnected.app.id=${{ env.CONNECTED_APP_ID }} \
                     -Dconnected.app.secret=${{ env.CONNECTED_APP_SECRET }} \
                     -Dcloudhub.environment=${{ inputs.deploy_target }} \
-                    -Dcloudhub.region=${{ env.CLOUDHUB_REGION }} 
+                    -Dcloudhub.region=${{ env.CLOUDHUB_REGION }} \
+                    -Dcloudhub.worker.type=${{ env.CLOUDHUB_WORKER_TYPE }} \
+                    -Dcloudhub.worker=${{ env.CLOUDHUB_WORKER }} \
+
 
 
 

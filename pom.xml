@@ -38,7 +38,7 @@
 						<environment>${cloudhub.environment}</environment>
 						<region>${cloudhub.region}</region>
 						<workers>${cloudhub.workers}</workers>
-						<workerType>${cloudhub.workerType}</workerType>
+						<workerType>${cloudhub.worker.type}</workerType>
 						<properties>
 							<secure.key>${secure.key}</secure.key>
 						</properties>
