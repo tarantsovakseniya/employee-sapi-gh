@@ -30,7 +30,7 @@ jobs:
                 cache: maven
 
              - name: Build the jar
-               run: mvn package -DskipTests -Dsecret.key=${{ secrets.MULE_KEY }}
+               run: mvn package --settings .maven/settings.xml -DskipTests -Dsecret.key=${{ secrets.MULE_KEY }} 
 
 
             
